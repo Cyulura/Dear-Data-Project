@@ -3,28 +3,35 @@ class Orbit
   int day;
   float radius;
   ArrayList<Record> records = new ArrayList<Record>();
-  
+
   static final int DAY_IN_MINUTES = 24 * 60 * 60;
+  static final int POINT_RADIUS = 5;
+  static final float DEG_90 = PI / 2;
 
   Orbit(int i_day, float i_radius)
   {
     day = i_day;
     radius = i_radius;
+    println(radius);
   }
 
   void draw()
   {
     noFill();
-    stroke(0);
-    strokeWeight(1);
+    stroke(0, 255);
+    strokeWeight(2);
 
-    circle(width/2, height/2, radius);
-    
+     //println(radius);
+    circle(width/2, height/2, radius * 2);
+
     for (Record record : records)
     {
-     fill(200);
-     noStroke();
-     circle(width/2 + cos(radians(2*PI*(record.clockTimeToMinutes() / DAY_IN_MINUTES))), height/2 + sin(radians(2*PI*(record.clockTimeToMinutes() / DAY_IN_MINUTES))), 10);
+      fill(200, 255);
+      noStroke();
+
+      float xPos = cos(2 * PI * (record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
+      float yPos = sin(2 * PI * (record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
+      circle(width/2 + xPos, height/2 + yPos, POINT_RADIUS);
     }
-  }
+ }
 }
