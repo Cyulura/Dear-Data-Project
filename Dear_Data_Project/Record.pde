@@ -12,16 +12,18 @@ enum RecordType {
 class Record
 {
   int day;
+  String objectName;
+  RecordType type;
   String clockTime;
   int minutes;
-  RecordType type;
 
-  Record(int i_day, String i_clockTime, RecordType i_type)
+  Record(int i_day, String i_objectName, RecordType i_type, String i_clockTime)
   {
     day = i_day;
+    objectName = i_objectName;
+    type = i_type;
     clockTime = i_clockTime;
     minutes = clockTimeToMinutes();
-    type = i_type;
   }
 
   int clockTimeToMinutes()

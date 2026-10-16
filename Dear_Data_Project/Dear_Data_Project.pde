@@ -10,7 +10,6 @@ void setup()
   size(800, 800);
   // Initialise
   orbits = new HashMap<Integer, Orbit>();
-  orbits.put(1, new Orbit(1, 50));
 
   // Load Data
   data = loadTable("Data.csv", "header");
@@ -18,16 +17,14 @@ void setup()
   println("Hello");
   for (TableRow row : data.rows())
   {
-    println(row);
     int dayNumber = row.getInt("Day");
     String time = row.getString("Time");
+    String objectName = row.getString("Name");
     RecordType type = RecordType.valueOf(row.getString("Type"));
-    
-    println(dayNumber);
-    
+
     // Inserting Data
-    orbits.putIfAbsent(dayNumber, new Orbit(dayNumber, 15 * dayNumber));
-    orbits.get(dayNumber).records.add(new Record(dayNumber, time, type));
+    orbits.putIfAbsent(dayNumber, new Orbit(dayNumber, 50 * dayNumber));
+    orbits.get(dayNumber).records.add(new Record(dayNumber, objectName, type, time));
   }
 }
 
