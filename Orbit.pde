@@ -1,3 +1,8 @@
+import java.util.Map;
+
+// Colors
+
+
 class Orbit
 {
   int day;
@@ -12,7 +17,6 @@ class Orbit
   {
     day = i_day;
     radius = i_radius;
-    println(radius);
   }
 
   void draw()
@@ -31,6 +35,8 @@ class Orbit
 
       float xPos = cos(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
       float yPos = sin(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
+      
+      fill(color(unhex(enumColors.get(record.type))));
       circle(width/2 + xPos, height/2 + yPos, POINT_RADIUS);
     }
   }
