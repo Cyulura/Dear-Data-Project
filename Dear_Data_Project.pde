@@ -25,7 +25,6 @@ void setup()
   // Load Data
   data = loadTable("Data.csv", "header");
   
-  println("Hello");
   for (TableRow row : data.rows())
   {
     int dayNumber = row.getInt("Day");
@@ -42,6 +41,22 @@ void setup()
 void draw()
 {
   background(255);
+  
+  // Key
+  fill(0, 255);
+  textAlign(LEFT, TOP);
+  
+  int startingY = 30;
+  text("Key", 10, 10);
+  
+  for (Map.Entry<RecordType, String> entry : enumColors.entrySet())
+  {
+    String enumName = entry.getKey().name();
+    fill(unhex(entry.getValue()));
+    text(enumName, 10, startingY);
+    startingY += 10;
+  }
+  
   for (Map.Entry<Integer, Orbit> entry : orbits.entrySet())
   {
     Orbit orbit = entry.getValue();

@@ -1,8 +1,5 @@
 import java.util.Map;
 
-// Colors
-
-
 class Orbit
 {
   int day;
