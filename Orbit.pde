@@ -6,7 +6,6 @@ class Orbit
   float radius;
   ArrayList<Record> records = new ArrayList<Record>();
 
-  static final int DAY_IN_MINUTES = 24 * 60;
   static final int POINT_RADIUS = 10;
 
   Orbit(int i_day, float i_radius)

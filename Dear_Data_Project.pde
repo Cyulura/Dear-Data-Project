@@ -8,10 +8,13 @@ HashMap<RecordType, String> enumColors = new HashMap<RecordType, String>();
 int orbitSpacing = 20;
 int fontSize = 14;
 int padding = 15;
+
 float maximumWidth;
+String currentMouseTime = "";
 
 // Constants
 float DEG_90 = PI / 2;
+int DAY_IN_MINUTES = 24 * 60;
 
 void setup()
 {
@@ -71,8 +74,6 @@ void draw()
     startingY += fontSize;
   }
 
-  println(maximumWidth);
-
   for (Map.Entry<Integer, Orbit> entry : orbits.entrySet())
   {
     Orbit orbit = entry.getValue();
@@ -87,14 +88,41 @@ void draw()
     String timeText = String.format("%02d:00", (int)i);
     float xPos = width/2 + cos(2 * PI * i/24 - DEG_90) * outerRingRadius;
     float yPos = height/2 + sin(2 * PI * i/24 - DEG_90) * outerRingRadius;
-    
+
     textAlign(CENTER, CENTER);
-    
+
     rectMode(CENTER);
     fill(128, 100);
     rect(xPos, yPos, textWidth(timeText) + 5, fontSize + 5, 5);
-    
+
     fill(0, 255);
     text(timeText, xPos, yPos);
   }
+
+  // Show current time relative to mouse position
+  fill(0, 255);
+  textAlign(RIGHT, BOTTOM);
+  text(currentMouseTime, width - padding, height - padding);
+}
+
+void displayRelativeTime()
+{
+  float relativeX = mouseX - width/2;
+  float relativeY = mouseY - height/2;
+
+  float angle = 2 * PI - (atan2(relativeX, relativeY) + PI);
+  float minutes = DAY_IN_MINUTES * (angle / (2 * PI));
+
+  int hours = floor(minutes / 60);
+  currentMouseTime = String.format("%02d:%02d", hours, (int) minutes % 60);
+}
+
+void mouseMoved()
+{
+  displayRelativeTime();
+}
+
+void mouseDragged()
+{
+  displayRelativeTime();
 }
