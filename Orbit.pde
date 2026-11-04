@@ -8,7 +8,6 @@ class Orbit
 
   static final int DAY_IN_MINUTES = 24 * 60;
   static final int POINT_RADIUS = 10;
-  static final float DEG_90 = PI / 2;
 
   Orbit(int i_day, float i_radius)
   {
@@ -19,10 +18,9 @@ class Orbit
   void draw()
   {
     noFill();
-    stroke(0, 255);
+    stroke(0, 100);
     strokeWeight(sqrt(POINT_RADIUS / 2));
 
-    //println(radius);
     circle(width/2, height/2, radius * 2);
 
     for (Record record : records)
@@ -30,11 +28,11 @@ class Orbit
       fill(200, 255);
       noStroke();
 
-      float xPos = cos(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
-      float yPos = sin(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
+      float xPos = width/2 + cos(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
+      float yPos = height/2 + sin(2 * PI * ((float) record.minutes / DAY_IN_MINUTES) - DEG_90) * radius;
       
       fill(color(unhex(enumColors.get(record.type))));
-      circle(width/2 + xPos, height/2 + yPos, POINT_RADIUS);
+      circle(xPos, yPos, POINT_RADIUS);
     }
   }
 }
