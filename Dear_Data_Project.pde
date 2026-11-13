@@ -5,6 +5,8 @@ import java.util.Map;
 Table data;
 HashMap<Integer, Orbit> orbits = new HashMap<Integer, Orbit>();
 HashMap<RecordType, String> enumColors = new HashMap<RecordType, String>();
+HashMap<Record, Position> recordPositions = new HashMap<Record, Position>();
+
 int orbitSpacing = 20;
 int fontSize = 14;
 int padding = 15;
@@ -15,10 +17,14 @@ String currentMouseTime = "";
 // Constants
 float DEG_90 = PI / 2;
 int DAY_IN_MINUTES = 24 * 60;
+int POINT_RADIUS = 10;
+int MINIMUM_HIGHLIGHT_DISTANCE = 20;
 
 void setup()
 {
   size(800, 800);
+  fill(100, 255);
+
   // Initialise
 
   // Colors
@@ -49,7 +55,7 @@ void setup()
 
 void draw()
 {
-  background(255);
+  background(#bce6f5);
 
   // Key
   textAlign(LEFT, TOP);
@@ -103,6 +109,9 @@ void draw()
   fill(0, 255);
   textAlign(RIGHT, BOTTOM);
   text(currentMouseTime, width - padding, height - padding);
+  
+  // Highlight closest Record
+  highlightRecord(getNearestRecordPoint());
 }
 
 void displayRelativeTime()
@@ -115,6 +124,36 @@ void displayRelativeTime()
 
   int hours = floor(minutes / 60);
   currentMouseTime = String.format("%02d:%02d", hours, (int) minutes % 60);
+}
+
+Record getNearestRecordPoint()
+{
+  Record nearestRecord = recordPositions.keySet().toArray(new Record[0])[0];
+  float lowestDistance = 9999999;
+  
+  for (Map.Entry<Record, Position> entry : recordPositions.entrySet())
+  {
+    Record record = entry.getKey();
+    Position position = entry.getValue();
+    
+    float distance = dist(mouseX, mouseY, position.x, position.y);
+    
+    if (distance < lowestDistance)
+    {
+      lowestDistance = distance;
+      nearestRecord = record;
+    }
+  }
+  
+  return nearestRecord;
+}
+
+void highlightRecord(Record record)
+{
+  Position position = recordPositions.get(record);
+  if (dist(mouseX, mouseY, position.x, position.y) > MINIMUM_HIGHLIGHT_DISTANCE) return;
+  
+  record.highlight = true;
 }
 
 void mouseMoved()
