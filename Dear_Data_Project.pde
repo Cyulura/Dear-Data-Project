@@ -8,8 +8,9 @@ HashMap<RecordType, String> enumColors = new HashMap<RecordType, String>();
 HashMap<Record, Position> recordPositions = new HashMap<Record, Position>();
 
 int orbitSpacing = 20;
-int fontSize = 14;
+int fontSize = 12;
 int padding = 15;
+int tooltipPadding = 10;
 
 float maximumWidth;
 String currentMouseTime = "";
@@ -88,7 +89,7 @@ void draw()
 
   // Render Times
   fill(0, 255);
-  int outerRingRadius = orbitSpacing * orbits.size() + padding * 2;
+  int outerRingRadius = orbitSpacing * orbits.size() + padding * 2 - 10;
   for (float i = 0; i < 24; i++)
   {
     String timeText = String.format("%02d:00", (int)i);
@@ -109,7 +110,7 @@ void draw()
   fill(0, 255);
   textAlign(RIGHT, BOTTOM);
   text(currentMouseTime, width - padding, height - padding);
-  
+
   // Highlight closest Record
   highlightRecord(getNearestRecordPoint());
 }
@@ -130,21 +131,21 @@ Record getNearestRecordPoint()
 {
   Record nearestRecord = recordPositions.keySet().toArray(new Record[0])[0];
   float lowestDistance = 9999999;
-  
+
   for (Map.Entry<Record, Position> entry : recordPositions.entrySet())
   {
     Record record = entry.getKey();
     Position position = entry.getValue();
-    
+
     float distance = dist(mouseX, mouseY, position.x, position.y);
-    
+
     if (distance < lowestDistance)
     {
       lowestDistance = distance;
       nearestRecord = record;
     }
   }
-  
+
   return nearestRecord;
 }
 
@@ -152,8 +153,43 @@ void highlightRecord(Record record)
 {
   Position position = recordPositions.get(record);
   if (dist(mouseX, mouseY, position.x, position.y) > MINIMUM_HIGHLIGHT_DISTANCE) return;
-  
+
   record.highlight = true;
+  displayTooltip(record);
+}
+
+void displayTooltip(Record record)
+{
+	boolean isLow = mouseY > height * 0.9 ? true : false;
+
+	float cornerX = mouseX + tooltipPadding;
+	float cornerY = mouseY + (isLow ? -tooltipPadding - 40 : tooltipPadding);
+
+	color recordColor = getRecordColor(record);
+
+	fill(brightness(recordColor) > 200 ? 30 : 200, 200);
+	rectMode(CORNER);
+	rect(cornerX, cornerY, 150, fontSize * 3 + 10, isLow ? 10 : 0, 10, 10, isLow ? 0 : 10);
+
+
+
+	// Display Information
+	fill(color(unhex(enumColors.get(record.type))));
+	textAlign(LEFT, TOP);
+
+	// Title
+	text(String.format("%s [Day %s]", record.objectName, record.day), cornerX + 5, cornerY + 5);
+
+	// Object Type
+	text(record.type.toString(), cornerX + 5, cornerY + 5 + fontSize);
+
+	// Time Seen
+	text(String.format("Time seen: %s", record.clockTime), cornerX + 5, cornerY + 5 + fontSize * 2);
+}
+
+color getRecordColor(Record record)
+{
+	return color(unhex(enumColors.get(record.type)));
 }
 
 void mouseMoved()

@@ -12,7 +12,7 @@ enum RecordType {
 class Position {
   public float x;
   public float y;
-  
+
   Position(float xPos, float yPos)
   {
      x = xPos;
@@ -37,11 +37,11 @@ class Record
     type = i_type;
     clockTime = i_clockTime;
     minutes = clockTimeToMinutes();
-    
+
     // Position Calculation
     float xPos = width/2 + cos(2 * PI * ((float) minutes / DAY_IN_MINUTES) - DEG_90) * day * orbitSpacing;
     float yPos = width/2 + sin(2 * PI * ((float) minutes / DAY_IN_MINUTES) - DEG_90) * day * orbitSpacing;
-    
+
     position = new Position(xPos, yPos);
     recordPositions.put(this, position);
   }
@@ -54,24 +54,25 @@ class Record
 
     return (hour * 60) + minute;
   }
-  
+
   void draw()
   {
       fill(200, 255);
       noStroke();
-      
-      color recordColor = color(unhex(enumColors.get(type)));
+
+
+      color recordColor = getRecordColor(this);
       fill(recordColor);
-      
+
       if (highlight)
       {
         stroke((brightness(recordColor) > 200 ? 0 : 255), 255);
         strokeWeight(2);
       }
-      
+
       circle(position.x, position.y, POINT_RADIUS);
       noStroke();
-      
+
       highlight = false;
   }
 }
